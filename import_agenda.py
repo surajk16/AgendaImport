@@ -1,42 +1,45 @@
 #!/usr/bin/python3
 
 from db_table import db_table
-
 import sys
 import xlrd
 
 START_ROW = 15
 
+## Function to escape quotes to allow insertion of texts into the db
 def escape_quotes(s):
     return s.replace("'", "''")
 
+## Function to create the table and return the db object
 def create_table():
 
     db = db_table(
-            ## Table name
-            "agendas", 
-            ## Table schema
-            { 
-                "id": "integer PRIMARY KEY AUTOINCREMENT", 
-                "date": "text REQUIRED",
-                "time_start": "text REQUIRED",
-                "time_end": "text REQUIRED",
-                "session": "integer REQUIRED",
-                "parent_session": "integer",
-                "title": "text REQUIRED",
-                "location": "text",
-                "description": "text",
-                "speaker": "text",
-            }
-        )
+        ## Table name
+        "agendas", 
+        ## Table schema
+        { 
+            "id": "integer PRIMARY KEY AUTOINCREMENT", 
+            "date": "text REQUIRED",
+            "time_start": "text REQUIRED",
+            "time_end": "text REQUIRED",
+            "session": "integer REQUIRED",
+            "parent_session": "integer",
+            "title": "text REQUIRED",
+            "location": "text",
+            "description": "text",
+            "speaker": "text",
+        }
+    )
 
     return db
 
+## Function to insert a single row into the db given the details
 def insert_row(db, date, time_start, time_end, session, parent_session, title, location, description, speaker):
-
+    
     session = 1 if (session == "Session") else 0
     if session:
-        parent_session = None
+        ## Will not have a parent session as it is not a sub session
+        parent_session = None 
 
     item = {
         "date": date,
@@ -56,9 +59,11 @@ def insert_row(db, date, time_start, time_end, session, parent_session, title, l
         if session:
             return row_id
         else:
+            ## If sub session return parent id for future reference
             return parent_session
     except Exception as e:
         print("Error inserting row", e)
+
 
 n = len(sys.argv)
 

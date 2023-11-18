@@ -1,33 +1,35 @@
 #!/usr/bin/python3
 
 from db_table import db_table
-
 import sys
 
 COLUMNS = ["date", "time_start", "time_end", "title", "location", "description", "speaker"]
 
+## Function to create table in database
 def create_table():
 
     db = db_table(
-            ## Table name
-            "agendas", 
-            ## Table schema
-            { 
-                "id": "integer PRIMARY KEY AUTOINCREMENT", 
-                "date": "text REQUIRED",
-                "time_start": "text REQUIRED",
-                "time_end": "text REQUIRED",
-                "session": "integer REQUIRED",
-                "parent_session": "integer",
-                "title": "text REQUIRED",
-                "location": "text",
-                "description": "text",
-                "speaker": "text",
-            }
-        )
+        ## Table name
+        "agendas", 
+        ## Table schema
+        { 
+            "id": "integer PRIMARY KEY AUTOINCREMENT", 
+            "date": "text REQUIRED",
+            "time_start": "text REQUIRED",
+            "time_end": "text REQUIRED",
+            "session": "integer REQUIRED",
+            "parent_session": "integer",
+            "title": "text REQUIRED",
+            "location": "text",
+            "description": "text",
+            "speaker": "text",
+        }
+    )
 
     return db
 
+## Function to format the result fetched 
+## from db for easier printing
 def format_result(result):
     session = "Session" if result["session"] else "Sub"
     return "Date: {} \nTime Start: {} \nTime End: {} \nSession/Subsession: {} \nSession Title: {} \nRoom/Location: {} \nDescription: {} \nSpeakers: {}\n".format(
