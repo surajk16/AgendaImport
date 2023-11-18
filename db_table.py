@@ -81,7 +81,7 @@ class db_table:
         query                = "SELECT %s FROM %s" % (columns_query_string, self.name)
         # build where query string
         if where:
-            where_query_string = [ "%s = '%s'" % (k,v) for k,v in where.iteritems() ]
+            where_query_string = [ "%s = '%s'" % (k,v) for k,v in where.items() ]
             query             += " WHERE " + ' AND '.join(where_query_string)
         
         result = []
@@ -98,6 +98,29 @@ class db_table:
             result.append(result_row)
 
         return result
+
+    def select_custom(self, columns = [], where=""):
+        # by default, query all columns
+        if not columns:
+            columns = [ k for k in self.schema ]
+
+        # build query string
+        columns_query_string = ", ".join(columns)
+        query                = "SELECT %s FROM %s" % (columns_query_string, self.name)
+
+        if where != "":
+            query += " WHERE " + where
+
+        result = []
+        for row in self.db_conn.execute(query):
+            result_row = {}
+            # convert from (val1, val2, val3) to { col1: val1, col2: val2, col3: val3 }
+            for i in range(0, len(columns)):
+                result_row[columns[i]] = row[i]
+            result.append(result_row)
+
+        return result
+
 
     #
     # INSERT INTO wrapper
