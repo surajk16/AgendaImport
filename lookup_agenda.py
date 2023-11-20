@@ -66,7 +66,7 @@ if (n == 3):
                 ## Get results of sub-sessions too
                 if (result["session"]):
 
-                    sub_where = "parent_session = {} AND {} != '{}'".format(result["id"], column, value)
+                    sub_where = "parent_session = {} AND LOWER({}) != LOWER('{}')".format(result["id"], column, value)
                     sub_results = db.select_custom(where=sub_where)
 
                     for sub_result in sub_results:
@@ -83,7 +83,7 @@ if (n == 3):
                 ## Get results of sub-sessions too
                 if (result["session"]):
 
-                    sub_where = "parent_session = {} AND {} NOT LIKE '%{}%'".format(result["id"], column, value)
+                    sub_where = "parent_session = {} AND LOWER({}) NOT LIKE LOWER('%{}%')".format(result["id"], column, value)
                     sub_results = db.select_custom(where=sub_where)
 
                     for sub_result in sub_results:

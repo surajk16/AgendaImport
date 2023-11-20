@@ -36,21 +36,21 @@ def create_table():
 ## Function to insert a single row into the db given the details
 def insert_row(db, date, time_start, time_end, session, parent_session, title, location, description, speaker):
     
-    session = 1 if (session == "Session") else 0
+    session = 1 if (session.strip() == "Session") else 0
     if session:
         ## Will not have a parent session as it is not a sub session
         parent_session = None 
 
     item = {
-        "date": date,
-        "time_start": time_start,
-        "time_end": time_end,
+        "date": date.strip(),
+        "time_start": time_start.strip(),
+        "time_end": time_end.strip(),
         "session": session,
         "parent_session": parent_session,
-        "title": escape_quotes(title),
-        "location": escape_quotes(location),
-        "description": escape_quotes(description),
-        "speaker": escape_quotes(speaker)
+        "title": escape_quotes(title.strip()),
+        "location": escape_quotes(location.strip()),
+        "description": escape_quotes(description.strip()),
+        "speaker": escape_quotes(speaker.strip())
     }
 
     try:
